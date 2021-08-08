@@ -1,11 +1,13 @@
 {
   "name": "@taff-platform/platform-host",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "WIP",
   "main": "lib/main.js",
   "types": "lib/main.d.ts",
   "scripts": {
     "test": "exit 0",
+    "pretest": "npm run build",
+    "prepublish": "npm run build",
     "clean": "rimraf ./lib",
     "build": "tsc"
   },
