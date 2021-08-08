@@ -6,7 +6,6 @@
   "types": "lib/main.d.ts",
   "scripts": {
     "test": "exit 0",
-    "prepare": "npm run build",
     "clean": "rimraf ./lib",
     "build": "tsc"
   },
