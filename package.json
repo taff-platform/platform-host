@@ -1,0 +1,41 @@
+{
+  "name": "@taff-platform/platform-host",
+  "version": "0.0.1",
+  "description": "WIP",
+  "main": "lib/main.js",
+  "types": "lib/main.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "npm run build",
+    "clean": "rimraf ./lib",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "files": [
+    "lib/**/*"
+  ],
+  "publishConfig": {
+    "@taff-platform:registry": "https://npm.pkg.github.com"
+  },
+  "author": "taff.io",
+  "license": "MIT",
+  "dependencies": {
+    "rxjs": "^6.6.7"
+  },
+  "devDependencies": {
+    "electron": "^13.1.6",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.3.5"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taff-platform/platform-host.git"
+  },
+  "bugs": {
+    "url": "https://github.com/taff-platform/platform-host/issues"
+  },
+  "homepage": "https://github.com/taff-platform/platform-host#readme"
+}
