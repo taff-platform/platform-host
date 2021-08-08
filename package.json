@@ -6,7 +6,6 @@
   "types": "lib/main.d.ts",
   "scripts": {
     "test": "exit 0",
-    "pretest": "npm run build",
     "prepublish": "npm run build",
     "clean": "rimraf ./lib",
     "build": "tsc"
