@@ -1,6 +1,7 @@
 import {app, ipcMain, Menu} from "electron"
 import {RuntimeProcess} from "./runtime-process";
 import {App, AppRegistry} from "../app";
+import {isAppModel} from "../app/app";
 
 export class Runtime {
 
@@ -40,6 +41,55 @@ export class Runtime {
         return this;
     }
 
+    public start(application: AppRegistry | App,
+                 path?: RuntimeStartPath | RuntimeStartCallback,
+                 callback: RuntimeStartCallback = typeof path === 'function' ? path : undefined) {
+
+        const registry = isAppModel(application) ? {
+            [`${application.target}`]: application
+        } : (application as any);
+
+        this.register(registry);
+
+        const pathMap = toApplicationRegistryPathMap(registry, path as any);
+        const taskList = Object.keys(registry)
+            .filter(key => isAppModel(registry[key]))
+            .map(appId => this.get(appId)
+            .run(pathMap[appId])
+            .then(process => {
+                return {
+                    appId,
+                    process
+                }
+            }));
+
+        const startup = Promise.all(taskList)
+            .then(runtimeList => {
+                return runtimeList.reduce((map, processEntry) => {
+                    return {
+                        ...map,
+                        [processEntry.appId]: process
+                    }
+                }, {});
+            });
+
+        if (!callback) {
+            return startup;
+        }
+
+        return startup.then((processMap: RuntimeProcessMap) => {
+                if (callback) {
+                    callback(null, processMap);
+                }
+            }).catch(error => {
+                if (callback) {
+                    callback(error, null);
+                } else {
+                    throw error;
+                }
+            });
+    }
+
     public add(key, app: App) {
         this.task.set(key, app);
     }
@@ -65,4 +115,32 @@ export class Runtime {
         app.quit();
     }
 
+}
+
+export interface RuntimeProcessMap {
+    [key: string]: RuntimeProcess;
+}
+
+export interface ApplicationRegistryPathMap {
+    [key: string]: string;
+}
+
+export type RuntimeStartPath = ApplicationRegistryPathMap | string;
+export type RuntimeStartCallback = (error: Error, processMap: RuntimeProcessMap) => any;
+
+function toApplicationRegistryPathMap(registry: AppRegistry, path: RuntimeStartPath): ApplicationRegistryPathMap {
+    if (typeof path === 'object') {
+        return path as ApplicationRegistryPathMap;
+    }
+
+    if (typeof path === 'string') {
+        return Object.keys(registry).reduce((map, appId) => {
+            return {
+                ...map,
+                [appId]: path
+            }
+        }, {})
+    }
+
+    return {};
 }

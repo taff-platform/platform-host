@@ -20,7 +20,8 @@ export class App {
         this.options = Object.assign({}, {
             window: DEFAULT_APP_WINDOW,
             animate: false
-        }, options)
+        }, options);
+
     }
 
     static for(uri: string[] | string, ...options: AppOptionsLike[]) {
@@ -54,6 +55,7 @@ export class App {
         }
 
         const taskList = [...(resolved as any).configure];
+
         resolved.configure = window => {
             taskList.forEach(configure => {
                 if (configure)
@@ -63,5 +65,11 @@ export class App {
 
         return new App(target, resolved);
     }
+
+}
+
+export function isAppModel(model: any): model is App {
+    return (model as App).target !== undefined &&
+        (model as App).options !== undefined;
 
 }
