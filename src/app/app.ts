@@ -1,27 +1,27 @@
 import {join} from 'path';
+import {merge} from 'lodash';
 import {AppOptions, AppOptionsLike, isAppOptions} from "./app-options";
 import {BrowserWindowConstructorOptions} from "electron";
 
-const DEFAULT_APP_WINDOW = {
-    width: 500,
-    height: 500,
-    webPreferences: {
-        preload: join(__dirname, 'app-preload.js'),
-        nodeIntegration: true,
-        contextIsolation: false
+export const APP_FALLBACK_OPTIONS = {
+    window: {
+        width: 500,
+        height: 500,
+        webPreferences: {
+            preload: join(__dirname, 'app-preload.js'),
+            nodeIntegration: true,
+            contextIsolation: false
+        },
     },
-};
+    animate: false
+}
 
 export class App {
 
     public options: AppOptions;
 
-    constructor(public target: string, options: AppOptions) {
-        this.options = Object.assign({}, {
-            window: DEFAULT_APP_WINDOW,
-            animate: false
-        }, options);
-
+    constructor(public target: string, options: AppOptions = APP_FALLBACK_OPTIONS) {
+        this.options = merge(APP_FALLBACK_OPTIONS, options);
     }
 
     static for(uri: string[] | string, ...options: AppOptionsLike[]) {
@@ -35,7 +35,7 @@ export class App {
             if (isAppOptions(option)) {
                 Object.assign(resolved, {
                     window: Object.assign({},
-                        DEFAULT_APP_WINDOW,
+                        APP_FALLBACK_OPTIONS.window,
                         resolved.window,
                         option.window
                     ),
@@ -46,7 +46,7 @@ export class App {
             } else {
                 Object.assign(resolved, {
                     window: Object.assign({},
-                        DEFAULT_APP_WINDOW,
+                        APP_FALLBACK_OPTIONS.window,
                         resolved.window,
                         option
                     )
@@ -70,6 +70,5 @@ export class App {
 
 export function isAppModel(model: any): model is App {
     return (model as App).target !== undefined &&
-        (model as App).options !== undefined;
-
+           (model as App).options !== undefined;
 }

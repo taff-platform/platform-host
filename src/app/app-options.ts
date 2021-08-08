@@ -2,7 +2,7 @@ import {BrowserWindow, BrowserWindowConstructorOptions} from "electron";
 
 export interface AppOptions {
     window: BrowserWindowConstructorOptions;
-    animate: boolean;
+    animate?: boolean;
     configure?: (window: BrowserWindow) => any
 }
 
