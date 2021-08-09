@@ -1,3 +1,3 @@
 export * from './app'
 
-export {Runtime, RuntimeProcessMap, RuntimeStartPath, RuntimeStartCallback} from './runtime'
+export {Host, RuntimeProcessMap, HostStartPath, HostStartCallback} from './host'

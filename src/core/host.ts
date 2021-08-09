@@ -2,7 +2,7 @@ import {app, ipcMain, Menu} from "electron"
 import {App, AppProcess, AppRegistry} from "./app";
 import {isAppModel} from "./app/app";
 
-export class Runtime {
+export class Host {
 
     private task: Map<string, App> = new Map<string, App>();
     private boot: Promise<any>;
@@ -25,7 +25,7 @@ export class Runtime {
         });
     }
 
-    public register(registry: AppRegistry | any): Runtime {
+    public register(registry: AppRegistry | any): Host {
         for (let registryKey in registry) {
             if (!registry.hasOwnProperty(registryKey)) {
                 continue;
@@ -40,8 +40,8 @@ export class Runtime {
     }
 
     public start(application: AppRegistry | App,
-                 path?: RuntimeStartPath | RuntimeStartCallback,
-                 callback: RuntimeStartCallback = typeof path === 'function' ? path : undefined) {
+                 path?: HostStartPath | HostStartCallback,
+                 callback: HostStartCallback = typeof path === 'function' ? path : undefined) {
 
         const registry = isAppModel(application) ? {
             [`${application.target}`]: application
@@ -123,10 +123,10 @@ export interface ApplicationRegistryPathMap {
     [key: string]: string;
 }
 
-export type RuntimeStartPath = ApplicationRegistryPathMap | string;
-export type RuntimeStartCallback = (error: Error, processMap: RuntimeProcessMap) => any;
+export type HostStartPath = ApplicationRegistryPathMap | string;
+export type HostStartCallback = (error: Error, processMap: RuntimeProcessMap) => any;
 
-function toApplicationRegistryPathMap(registry: AppRegistry, path: RuntimeStartPath): ApplicationRegistryPathMap {
+function toApplicationRegistryPathMap(registry: AppRegistry, path: HostStartPath): ApplicationRegistryPathMap {
     if (typeof path === 'object') {
         return path as ApplicationRegistryPathMap;
     }

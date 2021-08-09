@@ -1,12 +1,12 @@
 import {BrowserWindow} from "electron"
 import {App} from "./index";
-import {Runtime} from "../runtime";
+import {Host} from "../host";
 import {AppOptions} from "./app-options";
 
 export class AppProcess {
-    private window: BrowserWindow;
+    public window: BrowserWindow;
 
-    constructor(private runtime: Runtime, private app: App) {
+    constructor(private host: Host, private app: App) {
     }
 
     public hide() {
@@ -18,7 +18,7 @@ export class AppProcess {
     }
 
     public async ensure() {
-        await this.runtime.ensure();
+        await this.host.ensure();
 
         this.window = this.window || new BrowserWindow(this.app.options.window);
 
