@@ -1,9 +1,9 @@
 import {BrowserWindow} from "electron"
-import {App} from "../app";
-import {Runtime} from "./runtime";
-import {AppOptions} from "../app/app-options";
+import {App} from "./index";
+import {Runtime} from "../runtime";
+import {AppOptions} from "./app-options";
 
-export class RuntimeProcess {
+export class AppProcess {
     private window: BrowserWindow;
 
     constructor(private runtime: Runtime, private app: App) {

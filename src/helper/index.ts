@@ -1,1 +1,0 @@
-export {Flag} from './flag'

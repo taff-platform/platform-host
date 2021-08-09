@@ -1,7 +1,6 @@
 import {app, ipcMain, Menu} from "electron"
-import {RuntimeProcess} from "./runtime-process";
-import {App, AppRegistry} from "../app";
-import {isAppModel} from "../app/app";
+import {App, AppProcess, AppRegistry} from "./app";
+import {isAppModel} from "./app/app";
 
 export class Runtime {
 
@@ -19,7 +18,6 @@ export class Runtime {
         app.addListener('window-all-closed', this.quit);
 
         ipcMain.on('system:cmd', (event, action) => {
-
             switch (action) {
                 case "exit":
                     this.quit()
@@ -107,7 +105,7 @@ export class Runtime {
     }
 
     public get(key) {
-        return new RuntimeProcess(this, this.task.get(key));
+        return new AppProcess(this, this.task.get(key));
     }
 
     private quit() {
@@ -118,7 +116,7 @@ export class Runtime {
 }
 
 export interface RuntimeProcessMap {
-    [key: string]: RuntimeProcess;
+    [key: string]: AppProcess;
 }
 
 export interface ApplicationRegistryPathMap {
