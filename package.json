@@ -21,7 +21,7 @@
   "author": "taff.io",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "rxjs": "^6.6.7"
   },
   "jest": {
